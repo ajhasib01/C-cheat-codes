@@ -1,10 +1,9 @@
 #include <iostream>
 using namespace std;
 
-
 void main_loop(char ans);
-void loop1(int input);
-void loop2(int input);
+void automated(int input);
+void user_input(int input);
 void findDominantValues(int data[], int size);
 void findDominantFromAuto(int auto_survey[], int size);
 void explanation(char ans);
@@ -12,19 +11,16 @@ void explanation(char ans);
 
 int main()
 {
-    char ans;
-    main_loop(ans);
+char Loop;
+    main_loop(Loop);
 }
 
-
-void main_loop(char ans)
+void main_loop(char Loop)
 
 {
-
     char answer;
     do
     {
-
         int input;
         cout<<"There are two ways to find the dominant option: \n1)Automated(DEMO) or 2)User Input. \nPlease select either option 1 or 2 by pressing the corresponding number: ";
         cin>>input;
@@ -32,41 +28,33 @@ void main_loop(char ans)
 
         if(input==1)
         {
-            loop1(input);
-
+            automated(input);
         }
         else if(input==2)
         {
-            loop2(input);
-
+            user_input(input);
         }
 
         else
         {
             cout<<"Invalid Value :)\n"<<endl;
         }
-
-
         cout<<"Want to use this program again?(y/n): ";
         cin>>answer;
         cin.ignore(100,'\n');
-
         cout<<endl;
 
     }
     while(answer=='y' || answer=='Y');
 
-
 }
 
-void loop1(int input)
+void automated(int input)
 
 {
+    cout<<"\nIn this program, you have ten data points {1, 3, 4, 2, 5, 6, 7, 8, 9, -1, -1, 2, -1}. We will determine the dominant value from these data points.\nNote: You can modify the data points as desired by inputting them in the auto_data box.\n"<<endl;
 
-
-    cout<<"\nIn this program, you have ten data points {1, 3, 4, 2, 5, 6, 7, 8, 9, 1}. We will determine the dominant value from these data points.\nNote: You can modify the data points as desired by inputting them in the auto_data box.\n"<<endl;
-
-    int auto_data[]= {1,3,4,2,5,6,7,8,9,1};
+    int auto_data[]= {1,3,4,2,5,6,7,8,9,-1,-1,-1,2};
 
     int size= sizeof(auto_data)/sizeof(auto_data[0]);
 
@@ -78,14 +66,12 @@ void loop1(int input)
     cin.ignore(100,'\n');
     if (ans=='y'||ans=='Y')
     {
-
         explanation(ans);
-
     }
     cout<<endl;
 }
 
-void loop2(int input)
+void user_input(int input)
 
 {
     int size;
@@ -94,13 +80,11 @@ void loop2(int input)
 
     if (size <= 0)
     {
-        cout << "Invalid data size!" << endl;
-
+     cout << "Invalid data size!" << endl;
     }
 
     int *surveyData= new int[size];
     cout << "Enter data:" <<endl;
-
     for (int i = 0; i < size; ++i)
     {
         cout << i + 1 << ") ";
@@ -109,12 +93,10 @@ void loop2(int input)
     cout<<"Dominant value(s) of "<<"{ ";
     for (int i = 0; i < size; ++i)
     {
-
         cout<<surveyData[i]<<"  ";
     }
     cout<<"}";
     findDominantValues(surveyData, size);
-
 
     delete[]surveyData;
 
@@ -122,15 +104,13 @@ void loop2(int input)
 
 void findDominantValues(int data[], int size)
 {
-    const int Range = 1000;
+    const int Range = 2000;
     int counts[Range] = {0};
-
 
     for (int i = 0; i < size; ++i)
     {
-        counts[data[i]]++;
+        counts[data[i]+1000]++;
     }
-
 
     int maxCount = 0;
     for (int i = 0; i < Range; ++i)
@@ -141,73 +121,61 @@ void findDominantValues(int data[], int size)
         }
     }
 
-
     cout << " => ";
-    bool Dominant = false;
     for (int i = 0; i < Range; ++i)
     {
         if (counts[i] == maxCount && maxCount > 1)
         {
-            cout << i <<'\t';
-            Dominant = true;
+            cout << i-1000 <<'\t';
         }
     }
-
-
-
-    if (!Dominant)
+    if (maxCount<=1)
     {
         cout << "None";
     }
-
     cout <<endl;
 }
 
 void findDominantFromAuto(int auto_survey[], int size)
 {
-
-    int Range= 1000;
-    int count[Range] = {0};
+    int Range= 2000;
+    int counts[Range] = {0};
 
     for (int i = 0; i < size; ++i)
     {
-        count[auto_survey[i]]++;
+        counts[auto_survey[i]+1000]++;
     }
 
     int max_count = 0;
 
     for (int i = 0; i < Range; ++i)
     {
-        if (count[i] > max_count)
+        if (counts[i] > max_count)
         {
-            max_count = count[i];
+            max_count = counts[i];
         }
     }
 
-    cout << "Dominant value(s) of {1, 3, 4, 2, 5, 6, 7, 8, 9, 1} => ";
-    bool Dominant = false;
+    cout << "Dominant value(s) of {1, 3, 4, 2, 5, 6, 7, 8, 9, -1, -1, 2, -1} => ";
+
     for (int i = 0; i < Range; ++i)
     {
-        if (count[i] == max_count && max_count>1)
+        if (counts[i] == max_count && max_count>1)
         {
-
-            cout << i <<'\t';
-            Dominant = true;
+            cout << i-1000<<'\t';
         }
     }
 
-    if(!Dominant)
+    if(max_count<=1)
     {
         cout<<"NONE";
-
     }
     cout<<endl;
 }
 
 void explanation(char ans)
 {
-
-    cout<<"This program outputs the most frequently occurring value in a data set.\nFor example, given the data set {1,3,4,2,5,6,7,8,9,1},the value 1 appears twice and no other value appears more than once.\nso 1 is the dominant value.";
+    cout<<"This program outputs the most frequently occurring value in a data set.\nFor example, given the data set {1, 3, 4, 2, 5, 6, 7, 8, 9, -1, -1, 2, -1},the value -1 appears three times and 2 appears twice .\nso -1 is the dominant value.";
     cout<<'\n'<<endl;
 }
 
